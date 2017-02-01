@@ -1,9 +1,9 @@
 <?php
 namespace theme_support;
 
-include_once($pluginDir.'/trait/Singleton.php');
-include_once($pluginDir.'/class/Path.php');
-include_once($pluginDir.'/class/WPBlog.php');
+include_once($plugin_dir.'/trait/Singleton.php');
+include_once($plugin_dir.'/class/Path.php');
+include_once($plugin_dir.'/class/WPBlog.php');
 
 class ThemeSupport{
 	// self::$PROTOCOL = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 'https://' : 'http://';

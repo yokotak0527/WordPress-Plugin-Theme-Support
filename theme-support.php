@@ -31,8 +31,8 @@ License: GPL2
   // ===========================================================================
   // PLUGIN DATAS
   // 
-  $pluginDir  = __DIR__;
-  $pluginData = get_file_data(__FILE__, [
+  $plugin_dir  = __DIR__;
+  $plugin_data = get_file_data(__FILE__, [
     'name'    => 'Plugin Name',
     'version' => 'Version'
   ]);
@@ -40,7 +40,7 @@ License: GPL2
   // PLUGIN CONSTS
   // 
   define('THEME_SUPPORT_TEXTDOMAIN', 'theme-support');
-  define('THEME_SUPPORT',            $pluginData['version']);
+  define('THEME_SUPPORT',            $plugin_data['version']);
   
   
   // include plugin class & short-code

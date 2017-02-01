@@ -1,6 +1,6 @@
 <?php
   namespace theme_support;
-  include_once($pluginDir.'/trait/Singleton.php');
+  include_once($plugin_dir.'/trait/Singleton.php');
 
   /**
    * Blogデータの扱いを簡単にする
@@ -31,9 +31,6 @@
         // 
         if($this->MULTISITE){
           $blogs = $wpdb->get_results( "SELECT blog_id FROM ".$wpdb->base_prefix."blogs ORDER BY blog_id" );
-          echo '<pre>';
-          var_dump($blogs);
-          echo '</pre>';
           $i = 0; $l = count($blogs);
           
           for(; $i<$l; $i++){
@@ -43,27 +40,33 @@
             // -----------------------------------------------------------------
             // sub-directory type multi site
             // 
-            if(!defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL){
-              
+            if(defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL){
+              $pretty_id     = preg_replace('/^https?:\/\//', '', home_url());
+              $rtv_site_path = str_replace(home_url(), '', site_url());
+              $pretty_id     = str_replace(DOMAIN_CURRENT_SITE, '', $pretty_id);
+              $pretty_id     = str_replace($rtv_site_path, '', $pretty_id);
+              $pretty_id     = basename($pretty_id);
             }
             // -----------------------------------------------------------------
             // sub-domain type multi site
             // 
             else{
-              $pretty_id = preg_replace('/^https?:\/\//', '', site_url());
+              $pretty_id = preg_replace('/^https?:\/\//', '', home_url());
               $pretty_id = str_replace('.'.DOMAIN_CURRENT_SITE, '', $pretty_id);
-              if(BLOG_ID_CURRENT_SITE === $blog_id) $pretty_id = 'root';
-              $blog_data[$pretty_id] = [
-                'blog_id'    => $blog_id,
-                'dir_name'   => $pretty_id,
-                'site_url'   => site_url(), // WordPress address
-                'home_url'   => home_url(), // Blog address
-                'theme_dir'  => get_stylesheet_directory_uri(),
-                'theme_name' => basename(get_stylesheet_directory_uri())
-              ];
-              $blog_id_2_pretty_id[$blog_id] = $pretty_id;
             }
-            $theme_name = basename(get_stylesheet_directory_uri());
+            // -----------------------------------------------------------------
+            // common
+            // 
+            if(BLOG_ID_CURRENT_SITE === $blog_id) $pretty_id = 'root';
+            $blog_data[$pretty_id] = [
+              'blog_id'    => $blog_id,
+              'dir_name'   => $pretty_id,
+              'site_url'   => site_url(), // WordPress address
+              'home_url'   => home_url(), // Blog address
+              'theme_dir'  => get_stylesheet_directory_uri(),
+              'theme_name' => basename(get_stylesheet_directory_uri())
+            ];
+            $blog_id_2_pretty_id[$blog_id] = $pretty_id;
             restore_current_blog();
           }
         }
