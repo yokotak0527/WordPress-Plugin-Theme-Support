@@ -1,0 +1,12 @@
+{
+  "name": "theme-support",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "author": "",
+  "license": "GPL2",
+  "devDependencies": {
+    "withpro-gulp-js": "git+ssh://git@github.com/WITHPROJECTS/withpro-gulp-js.git",
+    "withpro-gulp-sass": "git+ssh://git@github.com/WITHPROJECTS/withpro-gulp-sass.git"
+  }
+}
