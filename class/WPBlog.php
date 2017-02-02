@@ -52,9 +52,10 @@
             // -----------------------------------------------------------------
             // sub-domain type multi-site
             // 
-            else{
+            if(defined('SUBDOMAIN_INSTALL') || SUBDOMAIN_INSTALL){
               $pretty_id = preg_replace('/^https?:\/\//', '', home_url());
               $pretty_id = str_replace('.'.DOMAIN_CURRENT_SITE, '', $pretty_id);
+              var_dump($pretty_id);
             }
             // -----------------------------------------------------------------
             // common
@@ -69,7 +70,6 @@
               'theme_dir_uri' => get_stylesheet_directory_uri(),
               'theme_name'    => get_stylesheet()
             ];
-            // var_dump(gettype(1));
             $this->blog_id_2_pretty_id[$blog_id] = $pretty_id;
             restore_current_blog();
           }
