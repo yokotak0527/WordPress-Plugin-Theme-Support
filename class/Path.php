@@ -1,11 +1,10 @@
 <?php
 namespace theme_support;
-/** ////////////////////////////////////////////////////////////////////////////
- * パスを取り扱う
- *
- * パス操作をしやすくするためのクラス
- *
+
+/**
+ * path manipulation
  * @author yokotak0527 <mail@yokotakenji.me>
+ * @version 1.0.1
  */
 class Path{
   private static function encode_special_text($path){
@@ -16,12 +15,23 @@ class Path{
     $path = str_replace('{{ptcl_sep}}',':/',$path);
     return $path;
   }
-  /** ========================================================================
-   * パスの結合
+  /**
+   * Return joined path.
+   * ex.
+   * Path->join('a', 'b')               - a/b/
+   * Path->join('a', '../b')            - b/
+   * Path->join('a', '../../b')         - b/
+   * Path->join('a', 'b', 'c//', '//d') - a/b/c/d/
+   * Path->join('dir', 'image.jpg')     - /dir
+   * 
+   * - If you wanna be to begin with "/" path, you can set as follows.
+   * Path->join('/b', 'c') - /b/c/
    *
-   * パスを結合する際に不要なスラッシュを削除したり、相対的に指定したりできる
-   *
-   * @param  string $arguments 結合するパス
+   * - When last slash that isn't necessary, you set last_slash option.
+   * Path->join('a', 'b', [last_slash => false]) - a/b
+   * 
+   * @access public
+   * @param  string|array args - path that join, only last args, you can set options array. [ last_slash => boolean ]
    * @return string
    */
   public static function join(){
@@ -66,12 +76,5 @@ class Path{
       $path .= '/';
     }
     return $path;
-  }
-  // =========================================================================
-  // パスの最後の要素を返す
-  // =========================================================================
-  public static function basename($p = '', $ext = false){
-    if($ext) return basename($p);
-    else return basename($p, $ext);
   }
 }

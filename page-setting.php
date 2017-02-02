@@ -1,7 +1,7 @@
 <?php
   namespace theme_support;
-  include_once('page/index.php');
-  include_once('page/setting.php');
+  include_once(THEME_SUPPORT_PATH.'/page/index.php');
+  include_once(THEME_SUPPORT_PATH.'/page/setting.php');
 
   // ===========================================================================
   // PAGE REGISTRATION

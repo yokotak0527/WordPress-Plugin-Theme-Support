@@ -31,7 +31,6 @@ License: GPL2
   // ===========================================================================
   // PLUGIN DATAS
   // 
-  $plugin_dir  = __DIR__;
   $plugin_data = get_file_data(__FILE__, [
     'name'    => 'Plugin Name',
     'version' => 'Version'
@@ -41,6 +40,7 @@ License: GPL2
   // 
   define('THEME_SUPPORT_TEXTDOMAIN', 'theme-support');
   define('THEME_SUPPORT',            $plugin_data['version']);
+  define('THEME_SUPPORT_PATH',       __DIR__);
   
   
   // include plugin class & short-code
@@ -52,6 +52,6 @@ License: GPL2
   // SETTING PLUGIN
   // 
   add_action('plugins_loaded', function(){
-    // admin page
-    include_once('page-setting.php');
+    include_once('page-setting.php');     // admin page
+    include_once('meta-box-setting.php'); // widgets
   });

@@ -14,6 +14,6 @@
     }
     public static function has_instance(){
       $class_name = get_class();
-      return self::$instance[$class_name] ? true : false;
+      return isset(self::$instance[$class_name]) ? true : false;
     }
   }

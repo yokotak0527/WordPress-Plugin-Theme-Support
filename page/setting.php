@@ -1,10 +1,10 @@
 <?php
   namespace theme_support;
 
-  $t_domain = THEME_SUPPORT_TEXTDOMAIN;
   if(is_admin()){
     
     add_action('admin_init', function(){
+      $t_domain = THEME_SUPPORT_TEXTDOMAIN;
       // -----------------------------------------------------------------------
       // section
       // 
@@ -34,18 +34,6 @@
       register_setting('theme-support-group', '_ts_dir-names--js');
       // Dir. names -> CSS
       register_setting('theme-support-group', '_ts_dir-names--css');
-      // CSS Break Points -> 0 -> name
-      register_setting('theme-support-group', '_ts_bp-0-name');
-      // CSS Break Points -> 0 -> max size
-      register_setting('theme-support-group', '_ts_bp-0-num');
-      // CSS Break Points -> 1 -> name
-      register_setting('theme-support-group', '_ts_bp-1-name');
-      // CSS Break Points -> 1 -> max size
-      register_setting('theme-support-group', '_ts_bp-1-num');
-      // CSS Break Points -> 2 -> name
-      register_setting('theme-support-group', '_ts_bp-2-name');
-      // CSS Break Points -> 2 -> max size
-      register_setting('theme-support-group', '_ts_bp-2-num');
       // Display Warning -> Comment accept
       register_setting('theme-support-group', '_ts_warning--comment');
       // Display Warning -> Pinback accept
@@ -66,6 +54,7 @@
   // page container template
   // ===========================================================================
   function display_setting_page(){
+    $t_domain = THEME_SUPPORT_TEXTDOMAIN;
 ?>
 <div class="wrap">
   <div class="theme-support-root">
@@ -85,6 +74,7 @@
   // form content template
   // ===========================================================================
   function display_setting_page_cnt(){
+    $t_domain = THEME_SUPPORT_TEXTDOMAIN;
 ?>
 <dl class="p__setting-list">
   <dt><?php _e('Use page CSS / JS', $t_domain); ?></dt>
@@ -136,28 +126,6 @@
           <td>
             <input type="text" name="_ts_dir-names--css" id="_ts_dir-names--css" value="<?php echo get_option('_ts_dir-names--css'); ?>">
           </td>
-        </tr>
-      </tbody>
-    </table>
-  </dd>
-  <dt><?php _e('CSS Break Points', $t_domain); ?></dt>
-  <dd>
-    <div class="introduction">
-      <p><? _e('If you set Break Points, when you must use "custom_enqueue_style" function. (defined THEME SUPPORT)'); ?></p>
-    </div>
-    <table class="break-points">
-      <tbody>
-        <tr>
-          <td class="name"><span><?php _e('Name', $t_domain); ?></span><input    type="text"   name="_ts_bp-0-name" id="_ts_bp-0-name" value="<?php echo get_option('_ts_bp-0-name'); ?>"></td>
-          <td class="num"><span><?php _e('Max size', $t_domain); ?></span><input type="number" name="_ts_bp-0-num"  id="_ts_bp-0-num"  value="<?php echo get_option('_ts_bp-0-num'); ?>"><span>px</span></td>
-        </tr>
-        <tr>
-          <td class="name"><span><?php _e('Name', $t_domain); ?></span><input    type="text"   name="_ts_bp-1-name" id="_ts_bp-1-name" value="<?php echo get_option('_ts_bp-1-name'); ?>"></td>
-          <td class="num"><span><?php _e('Max size', $t_domain); ?></span><input type="number" name="_ts_bp-1-num"  id="_ts_bp-1-num"  value="<?php echo get_option('_ts_bp-1-num'); ?>"><span>px</span></td>
-        </tr>
-        <tr>
-          <td class="name"><span><?php _e('Name', $t_domain); ?></span><input    type="text"   name="_ts_bp-2-name" id="_ts_bp-2-name" value="<?php echo get_option('_ts_bp-2-name'); ?>"></td>
-          <td class="num"><span><?php _e('Max size', $t_domain); ?></span><input type="number" name="_ts_bp-2-num"  id="_ts_bp-2-num"  value="<?php echo get_option('_ts_bp-2-num'); ?>"><span>px</span></td>
         </tr>
       </tbody>
     </table>
