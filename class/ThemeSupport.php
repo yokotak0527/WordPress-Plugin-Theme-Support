@@ -121,6 +121,7 @@ class ThemeSupport{
    * 
    */
   public function src($args = []){
+    var_dump($args['blog']);
     $blog = $args['blog'] ? $args['blog'] : false;
     $blog = $this->blog->data($blog);
     echo '<pre>';
