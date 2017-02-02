@@ -117,6 +117,16 @@ class ThemeSupport{
   public function join_path(){
     echo call_user_func_array([$this, 'get_join_path'], func_get_args());
   }
+  /**
+   * 
+   */
+  public function src($args = []){
+    $blog = $args['blog'] ? $args['blog'] : false;
+    $blog = $this->blog->data($blog);
+    echo '<pre>';
+    var_dump($blog);
+    echo '</pre>';
+  }
   // public get_dir($type, $where){
   //   
   // }

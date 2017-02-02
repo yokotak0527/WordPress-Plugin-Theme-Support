@@ -20,7 +20,6 @@
         global $wpdb;
         if(self::has_instance()) return self::get_instance();
 
-        // var_dump(self::$MULTISITE);
         $this->MULTISITE = defined('MULTISITE') ? MULTISITE : false;
         
         // =====================================================================
@@ -38,17 +37,20 @@
             switch_to_blog($blog_id);
             
             // -----------------------------------------------------------------
-            // sub-directory type multi site
+            // sub-directory type multi-site
             // 
             if(defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL){
-              $pretty_id     = preg_replace('/^https?:\/\//', '', home_url());
               $rtv_site_path = str_replace(home_url(), '', site_url());
+              $rtv_site_path = preg_replace('/(^\/)(.*)(\/$)/', '$2', $rtv_site_path);
+
+              $pretty_id     = preg_replace('/^https?:\/\//', '', home_url());
               $pretty_id     = str_replace(DOMAIN_CURRENT_SITE, '', $pretty_id);
               $pretty_id     = str_replace($rtv_site_path, '', $pretty_id);
+              $pretty_id     = preg_replace('/(^\/)(.*)(\/$)/', '$2', $pretty_id);
               $pretty_id     = basename($pretty_id);
             }
             // -----------------------------------------------------------------
-            // sub-domain type multi site
+            // sub-domain type multi-site
             // 
             else{
               $pretty_id = preg_replace('/^https?:\/\//', '', home_url());
@@ -58,15 +60,17 @@
             // common
             // 
             if(BLOG_ID_CURRENT_SITE === $blog_id) $pretty_id = 'root';
-            $blog_data[$pretty_id] = [
-              'blog_id'    => $blog_id,
-              'dir_name'   => $pretty_id,
-              'site_url'   => site_url(), // WordPress address
-              'home_url'   => home_url(), // Blog address
-              'theme_dir'  => get_stylesheet_directory_uri(),
-              'theme_name' => basename(get_stylesheet_directory_uri())
+            $this->blog_data[$pretty_id] = [
+              'blog_id'       => $blog_id,
+              'dir_name'      => $pretty_id,
+              'site_url'      => site_url(), // WordPress address
+              'home_url'      => home_url(), // Blog address
+              'theme_dir'     => get_stylesheet_directory(),
+              'theme_dir_uri' => get_stylesheet_directory_uri(),
+              'theme_name'    => get_stylesheet()
             ];
-            $blog_id_2_pretty_id[$blog_id] = $pretty_id;
+            // var_dump(gettype(1));
+            $this->blog_id_2_pretty_id[$blog_id] = $pretty_id;
             restore_current_blog();
           }
         }
@@ -83,9 +87,42 @@
             'theme_dir'  => get_stylesheet_directory_uri(),
             'theme_name' => basename(get_stylesheet_directory_uri())
           ];
-          $blog_id_2_pretty_id[$blog_id] = $pretty_id;
+          $this->blog_id_2_pretty_id[$blog_id] = $pretty_id;
         } 
       
         self::set_instance($this);
     }
+    /**
+     * 
+     * @return boolean
+     */
+  	public function is_multisite(){
+  		return $this->MULTISITE;
+  	}
+    /**
+     * Return Blog data
+     * @param  string|int $key
+     * @return array|boolean
+     */
+  	public function data($key = false){
+      if($key === false){
+        $key = $this->blog_id_2_pretty_id[get_current_blog_id()];
+      }
+      if(gettype($key) === 'integer'){
+        if(isset($this->blog_id_2_pretty_id[$key])){
+          $key = $this->blog_id_2_pretty_id[$key];
+        }else{
+          return false;
+        }
+      }
+      if(!isset($this->blog_data[$key])) return false;
+      return $this->blog_data[$key];
+  	}
+    /**
+     * [get_root_blog_data description]
+     * @return [type] [description]
+     */
+  	public function root_data(){
+  		return $this->get_blog_data('root');
+  	}
   }
