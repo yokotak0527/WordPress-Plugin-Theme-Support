@@ -8,20 +8,19 @@
    * @author yokotak0527 <mail@yokotakenji.me>
    */
 
-  class WPBlog{
+  class WP_Blog{
     use Singleton;
   	private $blog_data           = [];
     private $blog_id_2_pretty_id = [];
     private $MULTISITE;
     /**
-     * 
+     *
      */
-    public function __construct(){
+    private function __construct(){
       global $wpdb;
-      if(self::has_instance()) return self::get_instance();
 
       $this->MULTISITE = defined('MULTISITE') ? MULTISITE : false;
-      
+
       // =======================================================================
       // Blog data setting
       // =======================================================================
@@ -38,11 +37,11 @@
 
       for(; $i<$l; $i++){
         $blog_id = (int) $blogs[$i]->blog_id;
-        switch_to_blog($blog_id);
+        if($this->MULTISITE) switch_to_blog($blog_id);
 
         // ---------------------------------------------------------------------
         // sub-directory type multi-site
-        // 
+        //
         if(defined('SUBDOMAIN_INSTALL') || !SUBDOMAIN_INSTALL){
           $rtv_site_path = str_replace(home_url(), '', site_url());
           $rtv_site_path = preg_replace('/(^\/)(.*)(\/$)/', '$2', $rtv_site_path);
@@ -55,14 +54,14 @@
         }
         // ---------------------------------------------------------------------
         // sub-domain type multi-site
-        // 
+        //
         if(defined('SUBDOMAIN_INSTALL') || SUBDOMAIN_INSTALL){
           $pretty_id = preg_replace('/^https?:\/\//', '', home_url());
           $pretty_id = str_replace('.'.DOMAIN_CURRENT_SITE, '', $pretty_id);
         }
         // ---------------------------------------------------------------------
         // common
-        // 
+        //
         if(BLOG_ID_CURRENT_SITE === $blog_id) $pretty_id = 'root';
         $this->blog_data[$pretty_id] = [
           'blog_id'          => $blog_id,
@@ -83,13 +82,12 @@
           ]
         ];
         $this->blog_id_2_pretty_id[$blog_id] = $pretty_id;
-        restore_current_blog();
+        if($this->MULTISITE) restore_current_blog();
       }
-    
-      self::set_instance($this);
+
     }
     /**
-     * 
+     *
      * @return boolean
      */
   	public function is_multisite(){

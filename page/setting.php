@@ -2,12 +2,12 @@
   namespace theme_support;
 
   if(is_admin()){
-    
+
     add_action('admin_init', function(){
       $t_domain = THEME_SUPPORT_TEXTDOMAIN;
       // -----------------------------------------------------------------------
       // section
-      // 
+      //
       add_settings_section(
           'theme-support-setting',  // セクション名
           __('Setting', $t_domain), // タイトル
@@ -19,34 +19,36 @@
       // -----------------------------------------------------------------------
       // registration
       // register_setting( グループ名, オプション名 (name属性), 入力値をサニタイズする関数 )
-      // 
+      //
       // Use page CSS / JS -> Developer
-      register_setting('theme-support-group', '_ts_use-page-files--dev');
+      register_setting('theme-support-group', '_ts_use-page-files--dev', 'intval');
       // Use page CSS / JS -> User
-      register_setting('theme-support-group', '_ts_use-page-files--usr');
+      register_setting('theme-support-group', '_ts_use-page-files--usr', 'intval');
       // External files dir. -> Developer
-      register_setting('theme-support-group', '_ts_external-file-dir--dev');
+      register_setting('theme-support-group', '_ts_external-file-dir--dev', 'sanitize_text_field');
       // External files dir. -> User
-      register_setting('theme-support-group', '_ts_external-file-dir--usr');
+      register_setting('theme-support-group', '_ts_external-file-dir--usr', 'sanitize_text_field');
       // Dir. names -> Image
-      register_setting('theme-support-group', '_ts_dir-names--img');
+      register_setting('theme-support-group', '_ts_dir-names--img', 'sanitize_text_field');
       // Dir. names -> JavaScript
-      register_setting('theme-support-group', '_ts_dir-names--js');
+      register_setting('theme-support-group', '_ts_dir-names--js', 'sanitize_text_field');
       // Dir. names -> CSS
-      register_setting('theme-support-group', '_ts_dir-names--css');
-      // Display Warning -> Comment accept
-      register_setting('theme-support-group', '_ts_warning--comment');
-      // Display Warning -> Pinback accept
-      register_setting('theme-support-group', '_ts_warning--pinback');
-      // Display Warning -> Able to access to author page
-      register_setting('theme-support-group', '_ts_warning--author-page');
-      // Display Warning -> Display PHP error
-      register_setting('theme-support-group', '_ts_warning--php-error');
-    }, 25);
-    // -------------------------------------------------------------------------
-    // error
-    // 
-    // External files dir. -> Developer
+      register_setting('theme-support-group', '_ts_dir-names--css', 'sanitize_text_field');
+      // Disable -> Attache file page
+      register_setting('theme-support-group', '_ts_disable--attache-file-page', 'intval');
+      // Disable -> Author page
+      register_setting('theme-support-group', '_ts_disable--author-page', 'intval');
+      // Disable -> Visual Editor on Page
+      register_setting('theme-support-group', '_ts_disable--visual-editor', 'intval');
+      // Disable -> Emoji
+      register_setting('theme-support-group', '_ts_disable--emoji', 'intval');
+      // Disable -> Emoji
+      register_setting('theme-support-group', '_ts_disable--rest', 'intval');
+      // Display Warning -> warning
+      register_setting('theme-support-group', '_ts_warning--comment', 'intval');
+      // Disable -> Pinback
+      register_setting('theme-support-group', '_ts_warning--pinback', 'intval');
+    }, 20);
   }
 ?>
 <?php
@@ -130,13 +132,22 @@
       </tbody>
     </table>
   </dd>
+  <dt><?php _e('Disable', $t_domain); ?></dt>
+  <dd>
+    <ul class="disable">
+      <li><label><input type="checkbox" name="_ts_disable--attache-file-page" id="_ts_disable--attache-file-page" value="1" <?php checked(1, get_option('_ts_disable--attache-file-page')); ?>><span><?php _e('Attache files page', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_disable--author-page"       id="_ts_disable--author-page"       value="1" <?php checked(1, get_option('_ts_disable--author-page')); ?>><span><?php _e('Author page', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_disable--visual-editor"     id="_ts_disable--visual-editor"     value="1" <?php checked(1, get_option('_ts_disable--visual-editor')); ?>><span><?php _e('Visual Editor on Page', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_disable--emoji"             id="_ts_disable--emoji"             value="1" <?php checked(1, get_option('_ts_disable--emoji')); ?>><span><?php _e('Emoji', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_disable--rest"              id="_ts_disable--rest"              value="1" <?php checked(1, get_option('_ts_disable--rest')); ?>><span><?php _e('WP REST API ("wp/vxxx" end point only.)', $t_domain); ?></span></label></li>
+    </ul>
+  </dd>
   <dt><?php _e('Display Warning', $t_domain); ?></dt>
   <dd>
     <ul class="warning">
-      <li><label><input type="checkbox" name="_ts_warning--comment"     id="_ts_warning--comment"     value="1" <?php checked(1, get_option('_ts_warning--comment')); ?>><span><?php _e('Comment accept', $t_domain); ?></span></label></li>
-      <li><label><input type="checkbox" name="_ts_warning--pinback"     id="_ts_warning--pinback"     value="1" <?php checked(1, get_option('_ts_warning--pinback')); ?>><span><?php _e('Pinback accept', $t_domain); ?></span></label></li>
-      <li><label><input type="checkbox" name="_ts_warning--author-page" id="_ts_warning--author-page" value="1" <?php checked(1, get_option('_ts_warning--author-page')); ?>><span><?php _e('Able to access to author page', $t_domain); ?></span></label></li>
-      <li><label><input type="checkbox" name="_ts_warning--php-error"   id="_ts_warning--php-error"   value="1" <?php checked(1, get_option('_ts_warning--php-error')); ?>><span><?php _e('Display PHP errors', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_warning--comment" id="_ts_warning--comment"         value="1" <?php checked(1, get_option('_ts_warning--comment')); ?>><span><?php _e('Accept comment', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_warning--pinback" id="_ts_warning--pinback"         value="1" <?php checked(1, get_option('_ts_warning--pinback')); ?>><span><?php _e('Accept pinback', $t_domain); ?></span></label></li>
+      <li><label><input type="checkbox" name="_ts_warning--pinback" id="_ts_warning--display-php-err" value="1" <?php checked(1, get_option('_ts_warning--display-php-err')); ?>><span><?php _e('Display PHP error', $t_domain); ?></span></label></li>
     </ul>
   </dd>
 </dl>

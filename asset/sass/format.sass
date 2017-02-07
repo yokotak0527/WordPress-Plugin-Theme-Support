@@ -138,6 +138,24 @@ $break-size : 780px
       td + td
         padding-left : 15px
     // -------------------------------------------------------------------------
+    // Disable
+    // -------------------------------------------------------------------------
+    .disable
+        margin-left : 15px
+        margin-left : 15px
+        li
+          line-height    : 1
+          font-size      : 13px
+          padding-bottom : 15px
+          span
+            position     : relative
+            top          : -0.1em
+            padding-left : 5px
+            @media screen and (max-width:$break-size)
+              top : -0.05em
+          &:first-child
+            padding-left : 0
+    // -------------------------------------------------------------------------
     // Display warning
     // -------------------------------------------------------------------------
     .warning
@@ -157,7 +175,7 @@ $break-size : 780px
             padding-left : 0
 
 // =============================================================================
-// META BOX : 
+// META BOX :
 // =============================================================================
 .ts__page-ex-files
   display : none

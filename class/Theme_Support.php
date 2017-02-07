@@ -3,97 +3,19 @@ namespace theme_support;
 
 include_once(THEME_SUPPORT_PATH.'/trait/Singleton.php');
 include_once(THEME_SUPPORT_PATH.'/class/Path.php');
-include_once(THEME_SUPPORT_PATH.'/class/WPBlog.php');
+include_once(THEME_SUPPORT_PATH.'/class/WP_Blog.php');
 
 /**
  * @author yokotak0527
  */
-class ThemeSupport{
-	use Singleton;
+class Theme_Support{
+  use Singleton;
   private $PROTOCOL;
-  PRIVATE $HTTP_HOST;
-  public function __construct(){
-    if(self::has_instance()) return self::get_instance();
+  private $HTTP_HOST;
+  private function __construct($args){
     $this->PROTOCOL  = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 'https://' : 'http://';
     $this->HTTP_HOST = $_SERVER['HTTP_HOST'];
-    $this->blog      = new WPBlog();
-    self::set_instance($this);
-    // var_dump(__CLASS__);
-      // $this->wpBlog = WPBlog::init();
-      // $this->MULTISITE = defined('MULTISITE') ? MULTISITE : false;
-      // =======================================================================
-      // Blog data setting
-      // =======================================================================
-      // 
-      // MULTI SITE
-      // if($this->MULTISITE){
-      //   
-      // }
-      // // SINGLE SITE
-      // else{
-        // 	$blogs_data['root'] = [
-        // 		'blog_id'    => get_current_blog_id(),
-        // 		'theme_name' => basename(get_stylesheet_directory_uri()),
-        // 		'url'        => get_bloginfo('url')
-        // 	];
-      // }
-  		// global $wpdb;
-  		// self::$multisite = defined('MULTISITE') ? MULTISITE : false;
-  		// // ---------------------------------------------------------------------
-  		// // ブログデータの設定
-  		// // ---------------------------------------------------------------------
-  		// $blogs_data = [];
-  		// // マルチサイト
-  		// if(self::$multisite){
-  		// 	$blogs = $wpdb->get_results( "SELECT blog_id FROM ".$wpdb->base_prefix."blogs ORDER BY blog_id" );
-  		// 	// array_unshift($blogs,$blogs[0]);
-  		// 	$i = 0; $l = count($blogs);
-  		// 	for(; $i<$l; $i++){
-  		// 		$blog_id = (int) $blogs[$i]->blog_id;
-  		// 		switch_to_blog($blog_id);
-  		// 		$theme_name = basename(get_stylesheet_directory_uri());
-  		// 		// $theme_name = $i == 0 ? 'root' : basename(get_stylesheet_directory_uri());
-  		// 		$blogs_data[$theme_name] = [
-  		// 			'blog_id'    => $blog_id,
-  		// 			'theme_name' => basename(get_stylesheet_directory_uri()),
-  		// 			// 'site_url' => get_blog_option($blog_id,'siteurl'),
-  		// 			'url'        => get_blog_option($blog_id,'home')
-  		// 		];
-  		// 		restore_current_blog();
-  		// 	}
-  		// 	// ルートの設定
-  		// 	switch_to_blog($root_id);
-  		// 	$blogs_data['root'] = [
-  		// 		'blog_id'    => $root_id,
-  		// 		'theme_name' => basename(get_stylesheet_directory_uri()),
-  		// 		// 'site_url' => get_blog_option($blog_id,'siteurl'),
-  		// 		'url'        => get_blog_option($blog_id, 'home')
-  		// 	];
-  		// 	restore_current_blog();
-  		// }
-  		// // シングルサイト
-  		// else{
-  		// 	$blogs_data['root'] = [
-  		// 		'blog_id'    => get_current_blog_id(),
-  		// 		'theme_name' => basename(get_stylesheet_directory_uri()),
-  		// 		'url'        => get_bloginfo('url')
-  		// 	];
-  		// }
-  		// define('ROOT_BLOG_THEME',$blogs_data['root']['theme_name']);
-  		// self::$blogs = $blogs_data;
-    
-    // $this->dirs = [
-    //   'img' => this->get_join_path(, get_option('_ts_dir-names--img'))
-    // ];
-    // var_dump($this->test);
-    
-  	// private static $IMAGE_DIR_NAME        = 'img';  // 画像ディレクトリ名
-  	// private static $JS_DIR_NAME           = 'js';   // JSディレクトリ名
-  	// private static $CSS_DIR_NAME          = 'css';  // CSSディレクトリ名
-  	// private static $PHP_DIR_NAME          = 'php';  // PHPディレクトリ名
-  	// private static $FONT_DIR_NAME         = 'font'; // フォントディレクトリ名
-    // var_dump($this->test);
-    // $this->
+    $this->blog      = WP_Blog::get_instance();
   }
   /**
    * Return joined path.
@@ -103,13 +25,13 @@ class ThemeSupport{
    * ThemeSupport->get_join_path('a', '../../b')         - b/
    * ThemeSupport->get_join_path('a', 'b', 'c//', '//d') - a/b/c/d/
    * ThemeSupport->get_join_path('dir', 'image.jpg')     - /dir
-   * 
+   *
    * - If you wanna be to begin with "/" path, you can set as follows.
    * ThemeSupport->get_join_path('/b', 'c') - /b/c/
    *
    * - When last slash that isn't necessary, you set last_slash option.
    * ThemeSupport->get_join_path('a', 'b', [last_slash => false]) - a/b
-   * 
+   *
    * @access public
    * @see    Path.join()
    * @param  string|array arguemnts[]
@@ -134,7 +56,7 @@ class ThemeSupport{
   }
 
 	public static function enqueue_style($handle=false, $src=false, $deps=[], $ver=false, $media=false, $size=false){
-    
+
 		// if(self::$break_points && $size && isset(self::$break_points[$size])){
 		// 	$media = self::$break_points[$size];
 		// }else{
@@ -144,10 +66,10 @@ class ThemeSupport{
 	}
   /**
    * Return order path
-   * 
+   *
    * @param  string|integer $args['blog']  blog id or pretty_id (default current blog id)
-   * @param  string         $args['type']  
-   * @param  string         $args['where'] "user", "theme", "webroot" 
+   * @param  string         $args['type']
+   * @param  string         $args['where'] "user", "theme", "webroot"
    * @param  boolean        $args['uri']   default true
    * @return string
    */
@@ -167,7 +89,7 @@ class ThemeSupport{
     $uri = !isset($args['uri']) ? true : $args['uri'];
 
     $insert_dir = isset($args['insert_dir']) ? $args['insert_dir'] : '';
-    
+
     $path = '';
     if($where === 'user'){
       if($uri){
@@ -225,7 +147,7 @@ class ThemeSupport{
    * include php
    */
   public function include_from(){
-    
+
   }
 }
 ?>
